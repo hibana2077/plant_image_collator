@@ -1,0 +1,5 @@
+pymongo
+opencv-python
+numpy
+pandas
+requests
