@@ -6,15 +6,6 @@ networks:
 
 services:
 
-  main:
-    build:
-      context: ./main
-      dockerfile: Dockerfile
-    environment:
-      - ENV_VARIABLE=value
-    networks:
-      - app-network
-      
   db:
     image: mongo:latest
     environment:
