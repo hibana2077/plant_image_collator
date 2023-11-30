@@ -2,14 +2,15 @@
 Author: hibana2077 hibana2077@gmaill.com
 Date: 2023-11-28 11:30:10
 LastEditors: hibana2077 hibana2077@gmail.com
-LastEditTime: 2023-11-30 10:56:33
+LastEditTime: 2023-11-30 11:24:57
 FilePath: /plant_image_collator/src/main/app.py
 Description: This is a main file for plant_image_collator
 '''
 import requests
 import base64
-import os
-import yaml
+from os import system
+from yaml.loader import SafeLoader
+from yaml import load
 from time import sleep
 from PIL import Image
 from io import BytesIO
@@ -21,7 +22,7 @@ def init():
     # load config
     config = dict()
     with open("config.yaml", "r") as f:
-        config = yaml.load(f.read(), Loader=yaml.FullLoader)
+        config = load(f, Loader=SafeLoader)
     # check config
     if config["verbose"]:
         print(config)
@@ -29,7 +30,7 @@ def init():
 
 def take_photo(encoding:str = "jpg"):
     # Use raspberry pi libcamera-jpeg tools to take photo
-    status = os.system(f"raspistill -o ./test.{encoding} -e {encoding}")
+    status = system(f"libcamera-jpeg -o test.{encoding}")
     if status == 0:
         print("take photo success")
         return True
@@ -71,7 +72,7 @@ def send_discord_webhook(discord_webhook_url:str, content:str):
     data = {
         "username": "Plant Image Collator Notification",
         "content": content,
-        "avatar_url": "../img/logo.png"
+        "avatar_url": "https://github.com/hibana2077/plant_image_collator/blob/main/img/logo.png"
     }
     response = requests.post(discord_webhook_url, json=data)
     if response.status_code == 200:
@@ -85,12 +86,10 @@ if __name__ == "__main__":
     config = init()
     while True:
         try:
-            print("try")
             photo = take_photo()
             if photo:
                 send_photo()
-                sleep(config["interval"])
-            break
+                if config["notify"]:send_discord_webhook(config["discord_webhook_url"], "Take photo success!")
+            sleep(config["interval"])
         except Exception as e:
             print(e)
-            break
