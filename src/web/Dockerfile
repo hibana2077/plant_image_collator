@@ -23,5 +23,9 @@ COPY ./pages /app/pages
 # Streamlit會使用的端口
 EXPOSE 3000
 
+# 設定環境變數
+ENV USER=streamlit
+ENV PWD=streamlit
+
 # 啟動Streamlit應用程式
 CMD ["streamlit", "run", "app.py", "--server.port", "3000"]

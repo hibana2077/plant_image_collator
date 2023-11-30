@@ -23,5 +23,9 @@ COPY . .
 # 對外開放 8000 端口
 EXPOSE 5000
 
+# 環境變數
+ENV MONGO_INITDB_ROOT_USERNAME="root"
+ENV MONGO_INITDB_ROOT_PASSWORD="root"
+
 # 執行 FastAPI 應用
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000"]
