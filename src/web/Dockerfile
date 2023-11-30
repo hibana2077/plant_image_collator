@@ -17,9 +17,6 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 # 複製應用程式碼
 COPY ./app.py /app/app.py
 
-# 複製其他檔案
-COPY ./pages /app/pages
-
 # Streamlit會使用的端口
 EXPOSE 3000
 
