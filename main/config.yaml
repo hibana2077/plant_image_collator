@@ -1,0 +1,6 @@
+
+encode: "png"
+interval: "360"
+notify: "true"
+notify_webhook: "NOTIFY_WEBHOOK"
+verbose: "true"
