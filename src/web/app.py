@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from io import BytesIO
-from datetime import datetime
+from datetime import datetime,timedelta
 from os import getenv
 from requests import get
 from base64 import b64decode
@@ -97,23 +97,28 @@ def main():
         st.header("Status")
         st.subheader("CPU")
         if cpu not in [None,0]:
-            fig_cpu = px.bar(df_node_mean, x=df_node_mean.index, y="CPU usage %", color="node_name", barmode="group")
+            df_node_mean = df_node_mean.reset_index()
+            st.dataframe(df_node_mean)
+            fig_cpu = px.bar(df_node_mean, x=df_node_mean.index, y="cpu", color="node_name", barmode="group")
             st.plotly_chart(fig_cpu, use_container_width=True)
         else:
             st.warning("No CPU data")
         st.subheader("Memory")
         if memory not in [None,0]:
-            fig_mem = px.bar(df_node_mean, x=df_node_mean.index, y="Memory usage %", color="node_name", barmode="group")
+            fig_mem = px.bar(df_node_mean, x=df_node_mean.index, y="memory", color="node_name", barmode="group")
             st.plotly_chart(fig_mem, use_container_width=True)
         else:
             st.warning("No Memory data")
         if df_node_mean is not None:
             st.subheader("Node")
             selected_node = st.selectbox("Select node", df_node.groups.keys(), index=None)
-            fig_node_history_cpu = px.line(df_node.get_group(selected_node), x=df_node.get_group(selected_node).index, y="cpu", title=f"{selected_node} CPU usage history")
-            st.plotly_chart(fig_node_history_cpu, use_container_width=True)
-            fig_node_history_memory = px.line(df_node.get_group(selected_node), x=df_node.get_group(selected_node).index, y="memory", title=f"{selected_node} Memory usage history")
-            st.plotly_chart(fig_node_history_memory, use_container_width=True)
+            if selected_node is not None:
+                fig_node_history_cpu = px.line(df_node.get_group(selected_node), x=df_node.get_group(selected_node).index, y="cpu", title=f"{selected_node} CPU usage history")
+                st.plotly_chart(fig_node_history_cpu, use_container_width=True)
+                fig_node_history_memory = px.line(df_node.get_group(selected_node), x=df_node.get_group(selected_node).index, y="memory", title=f"{selected_node} Memory usage history")
+                st.plotly_chart(fig_node_history_memory, use_container_width=True)
+            else:
+                st.warning("No node selected")
         else:
             st.warning("No node data")
         
@@ -124,20 +129,20 @@ def main():
         selected_node = st.selectbox("Select node", list(image_data.keys()), index=None, key="Photo-select-node")
         if selected_node is not None:
             image_data[selected_node].sort(key=lambda x:x["time"])
-            earliest_time = datetime.date(image_data[selected_node][0]["time"])
-            latest_time = datetime.date(image_data[selected_node][-1]["time"])
-            recommended_date_end = datetime.date(earliest_time.year, earliest_time.month, earliest_time.day+1)
+            earliest_time = image_data[selected_node][0]["time"]
+            latest_time = image_data[selected_node][-1]["time"] + timedelta(days=2)
+            recommended_date_end = earliest_time + timedelta(days=1)
             selected_date_range = st.date_input("Select date range",(earliest_time, recommended_date_end), earliest_time, latest_time)
             filtered_image_data = []
             for i in image_data[selected_node]:
-                if selected_date_range[0] <= datetime.date(i["time"]) <= selected_date_range[1]:
+                if selected_date_range[0] <= i["time"].date() <= selected_date_range[1]:
                     filtered_image_data.append(i)
             if len(filtered_image_data) == 0:st.warning("No photo")
             else:
                 st.subheader("Select photo")
                 st.info("Click the download button to download the photo")
                 st.download_button(label="Download", data=pd.DataFrame(filtered_image_data).to_csv(index=False), file_name="photo.csv", mime="text/csv")
-                st.download_button(label="Download all", data=dowload_all_photo(), file_name="all_photo.csv", mime="text/csv")
+                # st.download_button(label="Download all", data=dowload_all_photo(), file_name="all_photo.csv", mime="text/csv")
                 image_list = [i["image"] for i in filtered_image_data]
                 caption_list = [f"{i['plant_name']} {i['time']}" for i in filtered_image_data]
                 if len(image_list) > 20:

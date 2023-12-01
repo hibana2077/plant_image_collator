@@ -1,8 +1,8 @@
 '''
 Author: hibana2077 hibana2077@gmaill.com
 Date: 2023-11-28 11:30:10
-LastEditors: hibana2077 hibana2077@gmail.com
-LastEditTime: 2023-12-01 02:37:14
+LastEditors: hibana2077 hibana2077@gmaill.com
+LastEditTime: 2023-12-01 18:40:29
 FilePath: /plant_image_collator/src/main/app.py
 Description: This is a main file for plant_image_collator
 '''
@@ -29,7 +29,7 @@ def init():
 
 def take_photo(encoding:str = "jpg"):
     # Use raspberry pi libcamera-jpeg tools to take photo
-    status = system(f"libcamera-jpeg -o test.{encoding} -e {encoding}")
+    status = system(f"libcamera-jpeg -o test.{encoding} -e {encoding} -v 0")
     if status == 0:
         print("take photo success")
         return True
@@ -99,7 +99,7 @@ if __name__ == "__main__":
                 send_photo(config=config)
                 send_status(config=config)
                 if config["notify"]:
-                    send_discord_webhook(config["discord_webhook_url"], "Take photo success!")
+                    send_discord_webhook(config["notify_webhook"], "Take photo success!")
             sleep(config["interval"])
         except Exception as e:
             print(e)
