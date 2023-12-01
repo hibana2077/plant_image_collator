@@ -92,7 +92,7 @@ def filter_data_transform(in_data:list):
             "plant_name": i["plant_name"],
             "node_name": i["node_name"]
         })
-    return pd.DataFrame(out_data).to_csv(index=False)
+    return out_data
 
 def main():
     if st.session_state["login"]:
@@ -154,7 +154,7 @@ def main():
                 st.subheader("Select photo")
                 st.info("Click the download button to download the photo")
                 # filtered_image_data['image'] need to transform to base64 format before download
-                st.download_button(label="Download", data=pd.DataFrame(filter_data_transform(filtered_image_data)), file_name="photo.csv", mime="text/csv")
+                st.download_button(label="Download", data=pd.DataFrame(filter_data_transform(filtered_image_data)).to_csv(index=False), file_name="photo.csv", mime="text/csv")
                 st.download_button(label="Download all", data=dowload_all_photo(), file_name="all_photo.csv", mime="text/csv")
                 image_list = [i["image"] for i in filtered_image_data]
                 caption_list = [f"{i['plant_name']} {i['time']}" for i in filtered_image_data]
