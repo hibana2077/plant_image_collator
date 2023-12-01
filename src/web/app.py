@@ -92,7 +92,7 @@ def filter_data_transform(in_data:list):
             "plant_name": i["plant_name"],
             "node_name": i["node_name"]
         })
-    return out_data
+    return pd.DataFrame(out_data).to_csv(index=False)
 
 def main():
     if st.session_state["login"]:
