@@ -5,6 +5,7 @@ from os import getenv
 app = FastAPI()
 mongo = MongoClient(f"mongodb://{getenv('MONGO_INITDB_ROOT_USERNAME')}:{getenv('MONGO_INITDB_ROOT_PASSWORD')}@db:27017/")
 
+
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
