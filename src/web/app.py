@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from io import BytesIO
-from datetime import datetime
+from datetime import datetime,timedelta
 from os import getenv
 from requests import get
 from base64 import b64decode
@@ -131,7 +131,7 @@ def main():
             image_data[selected_node].sort(key=lambda x:x["time"])
             earliest_time = datetime.date(image_data[selected_node][0]["time"])
             latest_time = datetime.date(image_data[selected_node][-1]["time"])
-            recommended_date_end = datetime.date(earliest_time.year, earliest_time.month, earliest_time.day+1)
+            recommended_date_end = datetime.date(earliest_time.year, earliest_time.month, earliest_time.day) + timedelta(days=1)
             selected_date_range = st.date_input("Select date range",(earliest_time, recommended_date_end), earliest_time, latest_time)
             filtered_image_data = []
             for i in image_data[selected_node]:
