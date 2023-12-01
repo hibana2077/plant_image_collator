@@ -129,13 +129,13 @@ def main():
         selected_node = st.selectbox("Select node", list(image_data.keys()), index=None, key="Photo-select-node")
         if selected_node is not None:
             image_data[selected_node].sort(key=lambda x:x["time"])
-            earliest_time = datetime.date(image_data[selected_node][0]["time"])
-            latest_time = datetime.date(image_data[selected_node][-1]["time"])
-            recommended_date_end = datetime.date(earliest_time.year, earliest_time.month, earliest_time.day) + timedelta(days=1)
+            earliest_time = image_data[selected_node][0]["time"]
+            latest_time = image_data[selected_node][-1]["time"]
+            recommended_date_end = earliest_time + timedelta(days=1)
             selected_date_range = st.date_input("Select date range",(earliest_time, recommended_date_end), earliest_time, latest_time)
             filtered_image_data = []
             for i in image_data[selected_node]:
-                if selected_date_range[0] <= datetime.date(i["time"]) <= selected_date_range[1]:
+                if selected_date_range[0] <= i["time"].date() <= selected_date_range[1]:
                     filtered_image_data.append(i)
             if len(filtered_image_data) == 0:st.warning("No photo")
             else:
