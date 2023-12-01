@@ -18,11 +18,11 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 COPY ./app.py /app/app.py
 
 # Streamlit會使用的端口
-EXPOSE 3000
+EXPOSE 8501
 
 # 設定環境變數
 ENV USER=streamlit
 ENV PWD=streamlit
 
 # 啟動Streamlit應用程式
-CMD ["streamlit", "run", "app.py", "--server.port", "3000"]
+CMD ["streamlit", "run", "app.py"]
