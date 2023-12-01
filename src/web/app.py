@@ -112,10 +112,13 @@ def main():
         if df_node_mean is not None:
             st.subheader("Node")
             selected_node = st.selectbox("Select node", df_node.groups.keys(), index=None)
-            fig_node_history_cpu = px.line(df_node.get_group(selected_node), x=df_node.get_group(selected_node).index, y="cpu", title=f"{selected_node} CPU usage history")
-            st.plotly_chart(fig_node_history_cpu, use_container_width=True)
-            fig_node_history_memory = px.line(df_node.get_group(selected_node), x=df_node.get_group(selected_node).index, y="memory", title=f"{selected_node} Memory usage history")
-            st.plotly_chart(fig_node_history_memory, use_container_width=True)
+            if selected_node is not None:
+                fig_node_history_cpu = px.line(df_node.get_group(selected_node), x=df_node.get_group(selected_node).index, y="cpu", title=f"{selected_node} CPU usage history")
+                st.plotly_chart(fig_node_history_cpu, use_container_width=True)
+                fig_node_history_memory = px.line(df_node.get_group(selected_node), x=df_node.get_group(selected_node).index, y="memory", title=f"{selected_node} Memory usage history")
+                st.plotly_chart(fig_node_history_memory, use_container_width=True)
+            else:
+                st.warning("No node selected")
         else:
             st.warning("No node data")
         
