@@ -97,6 +97,7 @@ def main():
         st.header("Status")
         st.subheader("CPU")
         if cpu not in [None,0]:
+            df_node_mean = df_node_mean.reset_index()
             st.dataframe(df_node_mean)
             fig_cpu = px.bar(df_node_mean, x=df_node_mean.index, y="cpu", color="node_name", barmode="group")
             st.plotly_chart(fig_cpu, use_container_width=True)
