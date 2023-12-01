@@ -4,7 +4,7 @@ from io import BytesIO
 from datetime import datetime,timedelta
 from os import getenv
 from requests import get
-from base64 import b64decode
+from base64 import b64decode,b64encode
 from plotly import express as px
 
 def init():
@@ -82,6 +82,18 @@ def caculate_diff(in_value:int | float | None):
     if in_value is None:return 0
     return in_value
 
+def filter_data_transform(in_data:list):
+    # Bytes to base64
+    out_data = []
+    for i in in_data:
+        out_data.append({
+            "image": b64encode(i["image"].getvalue()).decode("utf-8"),
+            "time": datetime.strptime(i["time"], "%Y-%m-%d %H:%M:%S"),
+            "plant_name": i["plant_name"],
+            "node_name": i["node_name"]
+        })
+    return out_data
+
 def main():
     if st.session_state["login"]:
         
@@ -141,7 +153,8 @@ def main():
             else:
                 st.subheader("Select photo")
                 st.info("Click the download button to download the photo")
-                st.download_button(label="Download", data=pd.DataFrame(filtered_image_data).to_csv(index=False), file_name="photo.csv", mime="text/csv")
+                # filtered_image_data['image'] need to transform to base64 format before download
+                st.download_button(label="Download", data=pd.DataFrame(filter_data_transform(filtered_image_data)), file_name="photo.csv", mime="text/csv")
                 st.download_button(label="Download all", data=dowload_all_photo(), file_name="all_photo.csv", mime="text/csv")
                 image_list = [i["image"] for i in filtered_image_data]
                 caption_list = [f"{i['plant_name']} {i['time']}" for i in filtered_image_data]
