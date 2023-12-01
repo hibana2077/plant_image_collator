@@ -97,13 +97,13 @@ def main():
         st.header("Status")
         st.subheader("CPU")
         if cpu not in [None,0]:
-            fig_cpu = px.bar(df_node_mean, x=df_node_mean.index, y="CPU usage %", color="node_name", barmode="group")
+            fig_cpu = px.bar(df_node_mean, x=df_node_mean.index, y="cpu", color="node_name", barmode="group")
             st.plotly_chart(fig_cpu, use_container_width=True)
         else:
             st.warning("No CPU data")
         st.subheader("Memory")
         if memory not in [None,0]:
-            fig_mem = px.bar(df_node_mean, x=df_node_mean.index, y="Memory usage %", color="node_name", barmode="group")
+            fig_mem = px.bar(df_node_mean, x=df_node_mean.index, y="memory", color="node_name", barmode="group")
             st.plotly_chart(fig_mem, use_container_width=True)
         else:
             st.warning("No Memory data")
