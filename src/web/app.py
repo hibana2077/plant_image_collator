@@ -27,11 +27,11 @@ def caculate_metrics():
     status = get(st.session_state["api_url"]+"status")
     if status.status_code != 200:
         st.error("Get status fail")
-        return
+        return None,None,None,None,None,None
     status = status.json()
     if len(status) == 0:
         st.warning("No status")
-        return
+        return None,None,None,None,None,None
     df_status = pd.DataFrame(status)
     df_status = df_status.set_index("time")
     df_status = df_status.sort_index()
