@@ -142,7 +142,7 @@ def main():
                 st.subheader("Select photo")
                 st.info("Click the download button to download the photo")
                 st.download_button(label="Download", data=pd.DataFrame(filtered_image_data).to_csv(index=False), file_name="photo.csv", mime="text/csv")
-                st.download_button(label="Download all", data=dowload_all_photo(), file_name="all_photo.csv", mime="text/csv")
+                # st.download_button(label="Download all", data=dowload_all_photo(), file_name="all_photo.csv", mime="text/csv")
                 image_list = [i["image"] for i in filtered_image_data]
                 caption_list = [f"{i['plant_name']} {i['time']}" for i in filtered_image_data]
                 if len(image_list) > 20:
