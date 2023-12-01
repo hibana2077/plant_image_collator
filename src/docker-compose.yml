@@ -7,7 +7,7 @@ networks:
 services:
 
   db:
-    image: mongo:latest
+    image: mongo:5
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=root
