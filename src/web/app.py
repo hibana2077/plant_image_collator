@@ -130,7 +130,7 @@ def main():
         if selected_node is not None:
             image_data[selected_node].sort(key=lambda x:x["time"])
             earliest_time = image_data[selected_node][0]["time"]
-            latest_time = image_data[selected_node][-1]["time"]
+            latest_time = image_data[selected_node][-1]["time"] + timedelta(days=2)
             recommended_date_end = earliest_time + timedelta(days=1)
             selected_date_range = st.date_input("Select date range",(earliest_time, recommended_date_end), earliest_time, latest_time)
             filtered_image_data = []
