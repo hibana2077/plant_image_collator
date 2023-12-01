@@ -14,6 +14,7 @@ async def photo(payload: dict):
     image = payload["photo"]
     time = payload["time"]
     plant_name = payload["plant_name"]
+    node_name = payload["node_name"]
     if not image or not time or not plant_name:return {"message": "fail"}
     db = mongo["plant_image_collator"]
     collection = db["photo"]
@@ -21,6 +22,7 @@ async def photo(payload: dict):
         "image": image,
         "time": time,
         "plant_name": plant_name,
+        "node_name": node_name
     })
     return {"message": "success"}
 
@@ -67,7 +69,8 @@ async def photo():
         return_data.append({
             "image": item["image"],
             "time": item["time"],
-            "plant_name": item["plant_name"]
+            "plant_name": item["plant_name"],
+            "node_name": item["node_name"]
         })
     return return_data
 
