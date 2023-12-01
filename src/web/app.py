@@ -88,7 +88,7 @@ def filter_data_transform(in_data:list):
     for i in in_data:
         out_data.append({
             "image": b64encode(i["image"].getvalue()).decode("utf-8"),
-            "time": datetime.strptime(i["time"], "%Y-%m-%d %H:%M:%S"),
+            "time": i["time"],
             "plant_name": i["plant_name"],
             "node_name": i["node_name"]
         })
