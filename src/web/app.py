@@ -78,6 +78,10 @@ def dowload_all_photo():
     # return dataframe in csv format
     return df
 
+def caculate_diff(in_value:int | float | None):
+    if in_value is None:return 0
+    return in_value
+
 def main():
     if st.session_state["login"]:
         
@@ -85,8 +89,8 @@ def main():
         # Mertics logic
         col1,col2,col3 = st.columns(3)
         cpu,memory,diff_cpu,diff_memory,df_node_mean,df_node = caculate_metrics()
-        col1.metric("CPU", f"{cpu}%", f"{diff_cpu}%")
-        col2.metric("Memory", f"{memory}%", f"{diff_memory}%")
+        col1.metric("CPU", f"{cpu}%", f"{caculate_diff(diff_cpu)}%")
+        col2.metric("Memory", f"{memory}%", f"{caculate_diff(diff_memory)}%")
         col3.metric("Status", "OK")
         
         # Status logic
