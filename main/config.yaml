@@ -1,5 +1,5 @@
 
-encode: "png"
+encoding: "png"
 interval: "360"
 notify: True
 verbose: True
