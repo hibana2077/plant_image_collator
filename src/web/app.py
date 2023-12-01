@@ -89,8 +89,8 @@ def main():
         # Mertics logic
         col1,col2,col3 = st.columns(3)
         cpu,memory,diff_cpu,diff_memory,df_node_mean,df_node = caculate_metrics()
-        col1.metric("CPU", f"{cpu}%", f"{caculate_diff(diff_cpu)}%")
-        col2.metric("Memory", f"{memory}%", f"{caculate_diff(diff_memory)}%")
+        col1.metric("CPU", f"{cpu} %", f"{caculate_diff(diff_cpu)} %")
+        col2.metric("Memory", f"{memory} %", f"{caculate_diff(diff_memory)} %")
         col3.metric("Status", "OK")# need to add error status logic
         
         # Status logic
