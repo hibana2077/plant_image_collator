@@ -2,7 +2,7 @@
  * @Author: hibana2077 hibana2077@gmaill.com
  * @Date: 2023-11-28 10:50:46
  * @LastEditors: hibana2077 hibana2077@gmail.com
- * @LastEditTime: 2023-12-02 15:32:29
+ * @LastEditTime: 2023-12-02 15:33:30
  * @FilePath: /plant_image_collator/README.md
  * @Description: This is a project for plant image collator.
 -->
@@ -72,9 +72,9 @@ The setup process is similar across Windows, Linux, macOS, and Single Board Comp
 
 This installation process sets up the GreenMerge server, allowing you to start managing and collating plant images effectively.
 
-## Collator Setup
+### Collator Setup
 
-### Raspberry Pi Series + IMX219 Camera Module
+#### Raspberry Pi Series + IMX219 Camera Module
 
 Follow these steps to set up a Raspberry Pi as a collator:
 
@@ -119,6 +119,10 @@ Follow these steps to set up a Raspberry Pi as a collator:
    - Test the camera with `libcamera-jpeg -o test.jpg`.
    - Download the test image to your computer with `scp pi@<your hostname>.local:test.jpg .`.
 
-### ESP32-CAM
+#### ESP32-CAM
 
 (Still under development)
+
+## 📝 License
+
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.
