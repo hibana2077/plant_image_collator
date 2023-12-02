@@ -2,13 +2,14 @@
 Author: hibana2077 hibana2077@gmaill.com
 Date: 2023-11-28 11:30:10
 LastEditors: hibana2077 hibana2077@gmail.com
-LastEditTime: 2023-12-02 22:37:51
+LastEditTime: 2023-12-02 22:52:15
 FilePath: /plant_image_collator/src/main/app.py
 Description: This is a main file for plant_image_collator
 '''
 from psutil import cpu_percent, virtual_memory
 from requests import post
 from base64 import b64encode
+from hashlib import sha256
 from os import system
 from yaml.loader import SafeLoader
 from yaml import load
@@ -90,6 +91,12 @@ def send_discord_webhook(discord_webhook_url:str, content:str):
         print("fail")
         return False
 
+def do_sth_make_cpu_busy2():
+    # sha256
+    for i in range(10000):
+        for j in range(1000):
+            sha256(str(i*j).encode())
+
 if __name__ == "__main__":
     config = init()
     start_time_photo_phot = time()
@@ -102,7 +109,7 @@ if __name__ == "__main__":
                 if photo:
                     send_photo(config=config)
                     if config["notify"]:send_discord_webhook(config["notify_webhook"], "Take photo success!")
-            if config["send_status"] and time() - start_time_status > int(config["interval"]):
+            if config["send_status"] and time() - start_time_status > (int(config["interval"])//10):
                 start_time_status = time()
                 send_status(config=config)
         except Exception as e:
