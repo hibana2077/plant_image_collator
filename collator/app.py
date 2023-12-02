@@ -2,7 +2,7 @@
 Author: hibana2077 hibana2077@gmaill.com
 Date: 2023-11-28 11:30:10
 LastEditors: hibana2077 hibana2077@gmail.com
-LastEditTime: 2023-12-02 22:31:09
+LastEditTime: 2023-12-02 22:35:04
 FilePath: /plant_image_collator/src/main/app.py
 Description: This is a main file for plant_image_collator
 '''
@@ -95,7 +95,7 @@ if __name__ == "__main__":
     start_time = time()
     while True:
         try:
-            if time() - start_time > config["interval"]:
+            if time() - start_time > int(config["interval"]):
                 start_time = time()
                 photo = take_photo(config["encoding"])
                 if photo:
