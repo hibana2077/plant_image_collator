@@ -2,7 +2,7 @@
  * @Author: hibana2077 hibana2077@gmaill.com
  * @Date: 2023-11-28 10:50:46
  * @LastEditors: hibana2077 hibana2077@gmail.com
- * @LastEditTime: 2023-12-02 15:24:44
+ * @LastEditTime: 2023-12-02 15:32:29
  * @FilePath: /plant_image_collator/README.md
  * @Description: This is a project for plant image collator.
 -->
@@ -99,10 +99,23 @@ Follow these steps to set up a Raspberry Pi as a collator:
    - Run the setup script: `sudo bash ./raspberry_pi_setup.sh`.
    - Reboot the Raspberry Pi: `sudo reboot`.
 
-6. **Start the Collator**:
+6. **Configure Collator Settings**:
+
+    To customization the collator's operations, edit the `collator/config.yaml` file with the following settings:
+
+    - `encoding`: Specify the image format. Example: `"png"`.
+    - `interval`: Set the time interval (in seconds) for image capture. Example: `"360"` (for capturing images every 360 seconds).
+    - `notify`: Enable or disable notifications. Set to `True` for enabling notifications.
+    - `verbose`: Enable detailed logging. Set to `True` for more detailed logs.
+    - `node_name`: Define the name of the node. Example: `"NODE_NAME"`.
+    - `notify_webhook`: Provide the webhook URL for notifications. Example: `"NOTIFY_WEBHOOK"`.
+    - `plant_name`: Name the plant being monitored. Example: `"PLANT_NAME"`.
+    - `URL`: Set the URL for the server where images are sent. Example: `"http://YOUR_IP:5000/"`.
+
+7. **Start the Collator**:
    - Start the collator with: `sudo bash ./raspberry_pi_start.sh`.
 
-7. **Test Camera Module**:
+8. **Test Camera Module**:
    - Test the camera with `libcamera-jpeg -o test.jpg`.
    - Download the test image to your computer with `scp pi@<your hostname>.local:test.jpg .`.
 
