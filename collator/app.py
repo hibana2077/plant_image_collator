@@ -2,7 +2,7 @@
 Author: hibana2077 hibana2077@gmaill.com
 Date: 2023-11-28 11:30:10
 LastEditors: hibana2077 hibana2077@gmail.com
-LastEditTime: 2023-12-02 22:57:28
+LastEditTime: 2023-12-02 22:58:44
 FilePath: /plant_image_collator/src/main/app.py
 Description: This is a main file for plant_image_collator
 '''
@@ -109,7 +109,7 @@ if __name__ == "__main__":
                 if photo:
                     send_photo(config=config)
                     if config["notify"]:send_discord_webhook(config["notify_webhook"], "Take photo success!")
-            if config["send_status"] and time() - start_time_status > (int(config["interval"])//10):
+            if time() - start_time_status > (int(config["interval"])//10):
                 start_time_status = time()
                 send_status(config=config)
         except Exception as e:
