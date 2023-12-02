@@ -1,8 +1,8 @@
 '''
 Author: hibana2077 hibana2077@gmaill.com
 Date: 2023-11-28 11:30:10
-LastEditors: hibana2077 hibana2077@gmaill.com
-LastEditTime: 2023-12-01 18:40:29
+LastEditors: hibana2077 hibana2077@gmail.com
+LastEditTime: 2023-12-02 22:15:10
 FilePath: /plant_image_collator/src/main/app.py
 Description: This is a main file for plant_image_collator
 '''
@@ -100,6 +100,6 @@ if __name__ == "__main__":
                 send_status(config=config)
                 if config["notify"]:
                     send_discord_webhook(config["notify_webhook"], "Take photo success!")
-            sleep(config["interval"])
+            sleep(int(config["interval"]))
         except Exception as e:
             print(e)
