@@ -2,7 +2,7 @@
 Author: hibana2077 hibana2077@gmaill.com
 Date: 2023-11-28 11:30:10
 LastEditors: hibana2077 hibana2077@gmail.com
-LastEditTime: 2023-12-02 22:35:04
+LastEditTime: 2023-12-02 22:37:51
 FilePath: /plant_image_collator/src/main/app.py
 Description: This is a main file for plant_image_collator
 '''
@@ -92,15 +92,18 @@ def send_discord_webhook(discord_webhook_url:str, content:str):
 
 if __name__ == "__main__":
     config = init()
-    start_time = time()
+    start_time_photo_phot = time()
+    start_time_status = time()
     while True:
         try:
-            if time() - start_time > int(config["interval"]):
-                start_time = time()
+            if time() - start_time_photo > int(config["interval"]):
+                start_time_photo = time()
                 photo = take_photo(config["encoding"])
                 if photo:
                     send_photo(config=config)
                     if config["notify"]:send_discord_webhook(config["notify_webhook"], "Take photo success!")
-            send_status(config=config)
+            if config["send_status"] and time() - start_time_status > int(config["interval"]):
+                start_time_status = time()
+                send_status(config=config)
         except Exception as e:
             print(e)
