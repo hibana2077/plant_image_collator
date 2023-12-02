@@ -88,7 +88,7 @@ async def status():
             "time": item["time"],
             "node_name": item["node_name"]
         })
-    return return_data
+    return return_data[-500:] if len(return_data) > 500 else return_data
 
 @app.get("/error")
 async def error():
