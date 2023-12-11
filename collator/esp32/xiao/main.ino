@@ -1,11 +1,13 @@
 /*
  * @Author: hibana2077 hibana2077@gmaill.com
- * @Date: 2023-12-11 08:36:22
+ * @Date: 2023-12-11 13:51:13
  * @LastEditors: hibana2077 hibana2077@gmaill.com
- * @LastEditTime: 2023-12-11 13:51:09
- * @FilePath: /plant_image_collator/collator/esp32/xiao/HelloServertes.ino
+ * @LastEditTime: 2023-12-11 14:57:49
+ * @FilePath: /plant_image_collator/collator/esp32/xiao/main.ino
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
+#include "esp_camera.h"
+#include <HTTPClient.h>
 #include <WiFi.h>
 #include <WiFiClient.h>
 #include <WebServer.h>
@@ -13,6 +15,32 @@
 
 const char* ssid = "R15-D3A4"; // change this to your WiFi SSID
 const char* password = "0978526075"; // change this to your WiFi password
+const char* serverName = "http://YOUR_SERVER_IP:5000/photo"; // replace with your server URL
+
+unsigned long lastTime = 0;
+unsigned long timerDelay = 2000;
+
+// ===================
+// Camera model Pins
+// ===================
+#define CAMERA_MODEL_XIAO_ESP32S3 // Has PSRAM
+#define PWDN_GPIO_NUM     -1
+#define RESET_GPIO_NUM    -1
+#define XCLK_GPIO_NUM     10
+#define SIOD_GPIO_NUM     40
+#define SIOC_GPIO_NUM     39
+
+#define Y9_GPIO_NUM       48
+#define Y8_GPIO_NUM       11
+#define Y7_GPIO_NUM       12
+#define Y6_GPIO_NUM       14
+#define Y5_GPIO_NUM       16
+#define Y4_GPIO_NUM       18
+#define Y3_GPIO_NUM       17
+#define Y2_GPIO_NUM       15
+#define VSYNC_GPIO_NUM    38
+#define HREF_GPIO_NUM     47
+#define PCLK_GPIO_NUM     13
 
 WebServer server(80);
 
