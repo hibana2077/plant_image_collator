@@ -2,7 +2,7 @@
  * @Author: hibana2077 hibana2077@gmail.com
  * @Date: 2023-12-11 18:36:12
  * @LastEditors: hibana2077 hibana2077@gmail.com
- * @LastEditTime: 2023-12-14 17:34:04
+ * @LastEditTime: 2023-12-14 17:58:57
  * @FilePath: \plant_image_collator\collator\esp32\xiao\main.ino
  * @Description: This is a file for ESP32S3 xiao board.
  */
@@ -50,7 +50,7 @@ void camera_setup(){
   // Initialize the camera module
 }
 
-int http_get(){
+int http_get(string get_server_name){
   // Send an HTTP GET request
   // Return the status code of the request
   int httpResponseCode = 0;
@@ -58,7 +58,7 @@ int http_get(){
   if (WiFi.status() == WL_CONNECTED){
     
     HTTPClient http;
-    http.begin(serverName);
+    http.begin(get_server_name.c_str());
     int httpResponseCode = http.GET();
 
     if (httpResponseCode>0){
@@ -79,14 +79,16 @@ int http_get(){
   return httpResponseCode;
 }
 
-void http_post(map<string, string> data){
+int http_post(map<string, string> data){
   // Send an HTTP POST request
   // Return the status code of the request
 }
 
-void test_network(){
+int test_network(){
   // Send an HTTP GET request to test the network, using TestServerName
   // Return the status code of the request
+  int httpResponseCode = http_get(TestServerName);
+  return httpResponseCode;
 }
 
 string take_photo(){
@@ -94,7 +96,7 @@ string take_photo(){
   // Return the photo as a base64 string
 }
 
-void send_photo(string photo){
+int send_photo(string photo){
   // Send the photo to the server
   // Return the status code of the request
 }
