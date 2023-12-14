@@ -1,151 +1,119 @@
 /*
- * @Author: hibana2077 hibana2077@gmaill.com
- * @Date: 2023-12-11 13:51:13
+ * @Author: hibana2077 hibana2077@gmail.com
+ * @Date: 2023-12-11 18:36:12
  * @LastEditors: hibana2077 hibana2077@gmail.com
- * @LastEditTime: 2023-12-14 14:09:36
- * @FilePath: /plant_image_collator/collator/esp32/xiao/main.ino
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @LastEditTime: 2023-12-14 17:34:04
+ * @FilePath: \plant_image_collator\collator\esp32\xiao\main.ino
+ * @Description: This is a file for ESP32S3 xiao board.
  */
-#include "esp_camera.h"
-#include <HTTPClient.h>
-#include <WiFi.h>
-#include <WiFiClient.h>
-#include <WebServer.h>
-#include <ESPmDNS.h>
+// -- lib --
+#include <WiFi.h> // packge: esp32
+#include <WiFiClient.h> // packge: esp32
+#include <WebServer.h> // packge: esp32
+#include <ESPmDNS.h> // packge: esp32
+#include "esp_camera.h" // packge: esp32
+#include <iostream>
+#include <map>
 
+// -- namespace --
+using std::copy;
+using std::map;
+using std::string;
+
+// -- config --
 const char* ssid = "R15-D3A4"; // change this to your WiFi SSID
 const char* password = "0978526075"; // change this to your WiFi password
 const char* serverName = "http://YOUR_SERVER_IP:5000/photo"; // replace with your server URL
+const char* TestServerName = "https://api.binance.com/api/v3/time"; // replace with your server URL
+const char* contentType = "application/json";
 
+// -- variables --
 unsigned long lastTime = 0;
-unsigned long timerDelay = 2000;
+unsigned long timerDelay = 5000;
 
-// ===================
-// Camera model Pins
-// ===================
-#define CAMERA_MODEL_XIAO_ESP32S3 // Has PSRAM
-#define PWDN_GPIO_NUM     -1
-#define RESET_GPIO_NUM    -1
-#define XCLK_GPIO_NUM     10
-#define SIOD_GPIO_NUM     40
-#define SIOC_GPIO_NUM     39
-
-#define Y9_GPIO_NUM       48
-#define Y8_GPIO_NUM       11
-#define Y7_GPIO_NUM       12
-#define Y6_GPIO_NUM       14
-#define Y5_GPIO_NUM       16
-#define Y4_GPIO_NUM       18
-#define Y3_GPIO_NUM       17
-#define Y2_GPIO_NUM       15
-#define VSYNC_GPIO_NUM    38
-#define HREF_GPIO_NUM     47
-#define PCLK_GPIO_NUM     13
-
-WebServer server(80);
-
-const int led = 13;
-bool Start_Capture = false;
-
-void initWiFi() {
-  WiFi.mode(WIFI_STA);
+// -- functions --
+void network_setup(){
+  WiFi.mode(WIFI_AP_STA);
   WiFi.begin(ssid, password);
-  WiFi.setTxPower(WIFI_POWER_8_5dBm);
-  Serial.print("Connecting to WiFi ..");
-  while (WiFi.status() != WL_CONNECTED) {
-    Serial.print('.');
-    delay(1000);
+  WiFi.setTxPower(WIFI_POWER_11dBm);
+  Serial.println("Connecting");
+  while(WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
   }
-  Serial.println();
-  Serial.println(WiFi.localIP());
-}
-
-void handleRoot() {
-  digitalWrite(led, 1);
-  server.send(200, "text/plain", "hello from esp32!");
-  digitalWrite(led, 0);
-}
-
-void handleNotFound() {
-  digitalWrite(led, 1);
-  String message = "File Not Found\n\n";
-  message += "URI: ";
-  message += server.uri();
-  message += "\nMethod: ";
-  message += (server.method() == HTTP_GET) ? "GET" : "POST";
-  message += "\nArguments: ";
-  message += server.args();
-  message += "\n";
-  for (uint8_t i = 0; i < server.args(); i++) {
-    message += " " + server.argName(i) + ": " + server.arg(i) + "\n";
-  }
-  server.send(404, "text/plain", message);
-  digitalWrite(led, 0);
-}
-
-void camera_setup() {
-    camera_config_t config;
-    config.ledc_channel = LEDC_CHANNEL_0;
-    config.ledc_timer = LEDC_TIMER_0;
-    config.pin_d0 = Y2_GPIO_NUM;
-    config.pin_d1 = Y3_GPIO_NUM;
-    config.pin_d2 = Y4_GPIO_NUM;
-    config.pin_d3 = Y5_GPIO_NUM;
-    config.pin_d4 = Y6_GPIO_NUM;
-    config.pin_d5 = Y7_GPIO_NUM;
-    config.pin_d6 = Y8_GPIO_NUM;
-    config.pin_d7 = Y9_GPIO_NUM;
-    config.pin_xclk = XCLK_GPIO_NUM;
-    config.pin_pclk = PCLK_GPIO_NUM;
-    config.pin_vsync = VSYNC_GPIO_NUM;
-    config.pin_href = HREF_GPIO_NUM;
-    config.pin_sscb_sda = SIOD_GPIO_NUM;
-    config.pin_sscb_scl = SIOC_GPIO_NUM;
-    config.pin_pwdn = PWDN_GPIO_NUM;
-    config.pin_reset = RESET_GPIO_NUM;
-    config.xclk_freq_hz = 20000000;
-    config.frame_size = FRAMESIZE_UXGA;
-    config.pixel_format = PIXFORMAT_JPEG;
-    config.grab_mode = CAMERA_GRAB_WHEN_EMPTY;
-    config.fb_location = CAMERA_FB_IN_PSRAM;
-    config.jpeg_quality = 12;
-    config.fb_count = 1;
-    
-}
-
-void setup(void) {
-  pinMode(led, OUTPUT);
-  digitalWrite(led, 0);
-  Serial.begin(115200);
-  WiFi.mode(WIFI_STA);
-  WiFi.disconnect();
-  delay(100);
-  
-  initWiFi();
-
   Serial.println("");
-  Serial.print("Connected to ");
-  Serial.println(ssid);
-  Serial.print("IP address: ");
+  Serial.print("Connected to WiFi network with IP Address: ");
   Serial.println(WiFi.localIP());
-
-  if (MDNS.begin("esp32")) {
-    Serial.println("MDNS responder started");
-  }
-
-  server.on("/", handleRoot);
-
-  server.on("/inline", []() {
-    server.send(200, "text/plain", "this works as well");
-  });
-
-  server.onNotFound(handleNotFound);
-
-  server.begin();
-  Serial.println("HTTP server started");
 }
 
-void loop(void) {
-  server.handleClient();
-  delay(2);//allow the cpu to switch to other tasks
+void camera_setup(){
+  // Initialize the camera module
+}
+
+int http_get(){
+  // Send an HTTP GET request
+  // Return the status code of the request
+  int httpResponseCode = 0;
+
+  if (WiFi.status() == WL_CONNECTED){
+    
+    HTTPClient http;
+    http.begin(serverName);
+    int httpResponseCode = http.GET();
+
+    if (httpResponseCode>0){
+      Serial.print("HTTP Response code: ");
+      Serial.println(httpResponseCode);
+      String payload = http.getString();
+      Serial.println(payload);
+    }
+    else {
+      Serial.print("Error code: ");
+      Serial.println(httpResponseCode);
+    }
+    http.end();
+  }
+  else {
+    Serial.println("WiFi Disconnected");
+  }
+  return httpResponseCode;
+}
+
+void http_post(map<string, string> data){
+  // Send an HTTP POST request
+  // Return the status code of the request
+}
+
+void test_network(){
+  // Send an HTTP GET request to test the network, using TestServerName
+  // Return the status code of the request
+}
+
+string take_photo(){
+  // Take a photo using the camera module
+  // Return the photo as a base64 string
+}
+
+void send_photo(string photo){
+  // Send the photo to the server
+  // Return the status code of the request
+}
+
+// -- main --
+void setup(){
+  Serial.begin(115200);
+  network_setup();
+  camera_setup();
+  int network_test = test_network();
+  if (network_test == 200){
+    Serial.println("Network test passed");
+  }
+  else {
+    Serial.println("Network test failed");
+  }
+
+}
+
+void loop(){
+
 }
