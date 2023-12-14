@@ -1,8 +1,8 @@
 /*
  * @Author: hibana2077 hibana2077@gmaill.com
  * @Date: 2023-12-11 13:51:13
- * @LastEditors: hibana2077 hibana2077@gmaill.com
- * @LastEditTime: 2023-12-12 09:23:17
+ * @LastEditors: hibana2077 hibana2077@gmail.com
+ * @LastEditTime: 2023-12-14 14:09:36
  * @FilePath: /plant_image_collator/collator/esp32/xiao/main.ino
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -45,6 +45,7 @@ unsigned long timerDelay = 2000;
 WebServer server(80);
 
 const int led = 13;
+bool Start_Capture = false;
 
 void initWiFi() {
   WiFi.mode(WIFI_STA);
@@ -85,6 +86,31 @@ void handleNotFound() {
 void camera_setup() {
     camera_config_t config;
     config.ledc_channel = LEDC_CHANNEL_0;
+    config.ledc_timer = LEDC_TIMER_0;
+    config.pin_d0 = Y2_GPIO_NUM;
+    config.pin_d1 = Y3_GPIO_NUM;
+    config.pin_d2 = Y4_GPIO_NUM;
+    config.pin_d3 = Y5_GPIO_NUM;
+    config.pin_d4 = Y6_GPIO_NUM;
+    config.pin_d5 = Y7_GPIO_NUM;
+    config.pin_d6 = Y8_GPIO_NUM;
+    config.pin_d7 = Y9_GPIO_NUM;
+    config.pin_xclk = XCLK_GPIO_NUM;
+    config.pin_pclk = PCLK_GPIO_NUM;
+    config.pin_vsync = VSYNC_GPIO_NUM;
+    config.pin_href = HREF_GPIO_NUM;
+    config.pin_sscb_sda = SIOD_GPIO_NUM;
+    config.pin_sscb_scl = SIOC_GPIO_NUM;
+    config.pin_pwdn = PWDN_GPIO_NUM;
+    config.pin_reset = RESET_GPIO_NUM;
+    config.xclk_freq_hz = 20000000;
+    config.frame_size = FRAMESIZE_UXGA;
+    config.pixel_format = PIXFORMAT_JPEG;
+    config.grab_mode = CAMERA_GRAB_WHEN_EMPTY;
+    config.fb_location = CAMERA_FB_IN_PSRAM;
+    config.jpeg_quality = 12;
+    config.fb_count = 1;
+    
 }
 
 void setup(void) {
