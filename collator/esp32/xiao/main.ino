@@ -2,7 +2,7 @@
  * @Author: hibana2077 hibana2077@gmail.com
  * @Date: 2023-12-11 18:36:12
  * @LastEditors: hibana2077 hibana2077@gmail.com
- * @LastEditTime: 2023-12-14 17:58:57
+ * @LastEditTime: 2023-12-14 19:04:26
  * @FilePath: \plant_image_collator\collator\esp32\xiao\main.ino
  * @Description: This is a file for ESP32S3 xiao board.
  */
@@ -26,6 +26,8 @@ const char* password = "0978526075"; // change this to your WiFi password
 const char* serverName = "http://YOUR_SERVER_IP:5000/photo"; // replace with your server URL
 const char* TestServerName = "https://api.binance.com/api/v3/time"; // replace with your server URL
 const char* contentType = "application/json";
+
+WebServer server(80);
 
 // -- variables --
 unsigned long lastTime = 0;
@@ -117,5 +119,6 @@ void setup(){
 }
 
 void loop(){
-
+  server.handleClient();
+  delay(1);
 }
