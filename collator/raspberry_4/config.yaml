@@ -1,0 +1,9 @@
+
+encoding: "png"
+interval: "360"
+notify: True
+verbose: True
+node_name: "NODE_NAME"
+notify_webhook: "NOTIFY_WEBHOOK"
+plant_name: "PLANT_NAME"
+URL: "http://YOUR_IP:5000/"
