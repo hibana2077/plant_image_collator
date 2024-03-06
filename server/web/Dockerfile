@@ -1,14 +1,11 @@
-# 使用ubuntu 22.04作為基礎映像檔
-FROM ubuntu:22.04
+# 使用
+FROM python:3.11-bullseye
 
 # 設定工作目錄
 WORKDIR /app
 
 #add python3 and other tools
-RUN apt-get update && apt-get install -y python3 python3-pip iputils-ping gcc g++ git
-
-# 更新pip
-RUN pip3 install --upgrade pip
+RUN apt-get update && apt-get install -y iputils-ping
 
 # 複製requirements.txt並安裝依賴
 COPY requirements.txt requirements.txt
