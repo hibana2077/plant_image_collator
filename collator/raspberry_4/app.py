@@ -16,6 +16,9 @@ from io import BytesIO
 from datetime import datetime
 import cv2 as cv
 
+WAVELENGTH_1 = 460
+WAVELENGTH_2 = 665
+
 def init():
     # load config
     config = dict()
