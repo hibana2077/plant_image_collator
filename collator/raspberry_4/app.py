@@ -149,6 +149,12 @@ if __name__ == "__main__":
     start_time_status = time()
     while True:
         try:
+            for i in range(length):
+                if i%2 == 0:
+                    pixels[i] = wavelength_to_rgb(WAVELENGTH_1)
+                else:
+                    pixels[i] = wavelength_to_rgb(WAVELENGTH_2)
+            pixels.show()
             if time() - start_time_photo > int(config["interval"]):
                 print("Take picture!")
                 start_time_photo = time()
@@ -158,9 +164,9 @@ if __name__ == "__main__":
                 if photo:
                     send_photo(config=config)
                     if config["notify"]:send_discord_webhook(config["notify_webhook"], "Take photo success!")
-            # if time() - start_time_status > (int(config["interval"])//10):
-            #     start_time_status = time()
-            #     send_status(config=config)
+            if time() - start_time_status > (int(config["interval"])//10):
+                start_time_status = time()
+                send_status(config=config)
         except Exception as e:
             print(e)
         except KeyboardInterrupt:
